@@ -1,0 +1,29 @@
+PDP Cleanroom Inventory Changelogs
+
+v1.5:
+- added categories for further filtering and organization
+- added sticky tabs to the left sides of "Active" and "Inactive" columns 
+- made sticky tabs expandable to view full names of the categories
+- made categories editable post creation
+
+v1.4:
+- added "Notes" Text box for each item
+- added collapsible sections based on month of item creation
+- removed repeated Owner display
+- changed text prompt
+
+v1.3:
+- made owner section editable
+- added RS section
+- added a custom option for tape color
+- added color code organization based on tape color
+
+v1.2:
+- added a new entry called "Tape Color"
+- added an "Edit" button allowing changes to existing items on the list
+- added a "Delete" button to remove items
+
+v1:
+- added entries "FOUP Name" and "Owner"
+- added two columns: Active and Inactive
+- made each entry present the time/day that the item was created

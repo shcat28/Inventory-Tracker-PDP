@@ -1,0 +1,878 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f8;
+  color: #1f2937;
+}
+
+.app-container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.app-header h1 {
+  margin: 0 0 8px;
+  font-size: 2.2rem;
+}
+
+.app-header p {
+  margin: 0;
+  color: #5f6b7a;
+}
+
+
+/* ADD FOUP SECTION */
+
+.item-form-section {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  margin-bottom: 28px;
+}
+
+.item-form-section h2 {
+  margin-top: 0;
+}
+
+
+/* Main Add FOUP form */
+.item-form {
+  display: grid;
+
+  grid-template-columns:
+    minmax(220px, 1fr)
+    minmax(160px, 0.75fr)
+    minmax(150px, 180px)
+    minmax(160px, 190px)
+    auto;
+
+  grid-template-rows: auto auto;
+
+  column-gap: 12px;
+  row-gap: 6px;
+
+  align-items: end;
+}
+
+
+/* General label styling */
+.item-form > label {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+
+/* General field styling */
+.item-form > input,
+.item-form > select,
+.category-field select {
+  width: 100%;
+  height: 44px;
+
+  padding: 10px 12px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+
+  background: white;
+  color: #1f2937;
+
+  font-size: 1rem;
+}
+
+
+/* FOUP NAME */
+
+.item-form > label[for="item-name"] {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#item-name {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+
+/* OWNER */
+
+.item-form > label[for="item-owner"] {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+#item-owner {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* TAPE COLOR */
+
+.item-form > label[for="item-color"] {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+#item-color {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+/* CATEGORY */
+
+.category-field {
+  grid-column: 4;
+  grid-row: 1 / 3;
+
+  display: grid;
+  grid-template-rows: auto 44px;
+
+  gap: 6px;
+
+  align-self: end;
+}
+
+.category-field label {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+#item-category {
+  height: 44px;
+}
+
+/* ADD FOUP BUTTON */
+
+.item-form > button[type="submit"] {
+  grid-column: 5;
+  grid-row: 2;
+
+  height: 44px;
+
+  padding: 0 18px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #1f2937;
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+}
+
+.item-form > button[type="submit"]:hover {
+  background: #374151;
+}
+
+
+/* TABLET */
+
+@media (max-width: 1000px) {
+
+  .item-form {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+
+  .item-form > label[for="item-name"],
+  #item-name,
+  .item-form > label[for="item-owner"],
+  #item-owner,
+  .item-form > label[for="item-color"],
+  #item-color,
+  .category-field,
+  .item-form > button[type="submit"] {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .category-field {
+    grid-template-rows: auto 44px;
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 760px) {
+
+  .item-form {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item-form > label {
+    margin-top: 8px;
+  }
+
+  .category-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .item-form > button[type="submit"] {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* CATEGORY MANAGER */
+
+.category-manager {
+  background: white;
+  border-radius: 14px;
+  padding: 18px 20px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  margin-bottom: 28px;
+}
+
+.category-manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.category-manager h2 {
+  margin: 0 0 4px;
+}
+
+.category-manager p {
+  margin: 0;
+  color: #5f6b7a;
+}
+
+.category-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category-form input {
+  min-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.category-form button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #1f2937;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.category-form button:hover {
+  background: #374151;
+}
+
+
+/* CATEGORY CHIPS */
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px 6px 11px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #374151;
+  font-size: 0.88rem;
+}
+
+.category-chip strong {
+  display: inline-flex;
+  min-width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: white;
+}
+
+.category-delete-btn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.category-delete-btn:hover {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.category-empty {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* INVENTORY BOARD */
+
+.inventory-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.column {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  min-height: 360px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+}
+
+.column-header h2 {
+  margin: 0;
+}
+
+.count {
+  background: #e5e7eb;
+  color: #374151;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-weight: 700;
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* ==========================
+   CATEGORY SECTIONS
+========================== */
+
+.category-section {
+  border: 1px solid #dbe3ec;
+  border-radius: 13px;
+  background: #f8fafc;
+  padding: 10px;
+}
+
+.category-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 800;
+  color: #111827;
+  padding: 6px;
+}
+
+.category-count {
+  display: inline-flex;
+  min-width: 28px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 0.8rem;
+}
+
+.category-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+
+/* ==========================
+   MONTH SECTIONS
+========================== */
+
+.month-section {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #f9fafb;
+  padding: 10px;
+}
+
+.month-summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: #1f2937;
+  padding: 6px;
+}
+
+.month-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+
+/* ==========================
+   FOUP CARDS
+========================== */
+
+.item-card {
+  border: 1px solid #e5e7eb;
+  border-left: 8px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 14px;
+  background: #ffffff;
+}
+
+.item-card.yellow {
+  border-left-color: #facc15;
+}
+
+.item-card.green {
+  border-left-color: #22c55e;
+}
+
+.item-card.blue {
+  border-left-color: #3b82f6;
+}
+
+.item-card.red {
+  border-left-color: #ef4444;
+}
+
+.item-card.none {
+  border-left-color: #9ca3af;
+}
+
+.item-card.custom {
+  border-left-color: #6b7280;
+}
+
+
+/* ==========================
+   CARD HEADER
+========================== */
+
+.item-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: start;
+}
+
+.item-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  word-break: break-word;
+}
+
+
+/* ==========================
+   PILLS
+========================== */
+
+.pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.color-pill,
+.save-pill,
+.category-pill {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.color-pill {
+  background: #f3f4f6;
+}
+
+.category-pill {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.save-pill {
+  background: #f3f4f6;
+}
+
+.save-pill.save {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.save-pill.not-save {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+
+/* ==========================
+   CARD DETAILS
+========================== */
+
+.item-details {
+  margin: 10px 0;
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.inline-edit-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.category-select,
+.save-status-select,
+.custom-color-input {
+  padding: 5px 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  color: #1f2937;
+  font-size: 0.9rem;
+}
+
+
+/* ==========================
+   NOTES
+========================== */
+
+.notes-label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 70px;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+
+/* ==========================
+   CARD BUTTONS
+========================== */
+
+.item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.item-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.edit-btn {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.move-btn {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+
+/* ==========================
+   EMPTY MESSAGE
+========================== */
+
+.empty-message {
+  color: #6b7280;
+  font-style: italic;
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* ==========================
+   EDITABLE CATEGORY MANAGER
+========================== */
+
+.category-chip-name {
+  font-weight: 700;
+}
+
+.category-edit-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: #e0f2fe;
+  color: #075985;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.category-edit-btn:hover {
+  background: #bae6fd;
+}
+
+/* ==========================
+   CATEGORY SIDE TABS
+========================== */
+
+.column-category-wrapper {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.category-content-container {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* Sticky rail */
+.category-side-tabs {
+  position: sticky;
+  top: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  align-self: start;
+
+  width: 46px;
+
+  z-index: 5;
+
+  transition: width 0.2s ease;
+}
+
+
+/* Expanded rail */
+.category-side-tabs.expanded {
+  width: 150px;
+}
+
+
+/* Expand/collapse control */
+.category-tabs-toggle {
+  width: 100%;
+  height: 30px;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #ffffff;
+  color: #374151;
+
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.category-tabs-toggle:hover {
+  background: #f3f4f6;
+}
+
+
+/* All category tabs have equal size */
+.category-side-tab {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+
+  background: #eef2f7;
+  color: #374151;
+
+  cursor: pointer;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  padding: 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  overflow: hidden;
+
+  transition:
+    width 0.2s ease,
+    background 0.15s ease;
+}
+
+
+/* Short abbreviation */
+.category-tab-short {
+  display: block;
+}
+
+
+/* Full category name hidden by default */
+.category-tab-full {
+  display: none;
+}
+
+
+/* Expanded tabs */
+.category-side-tabs.expanded
+.category-side-tab {
+  width: 150px;
+
+  justify-content: flex-start;
+
+  padding: 8px 10px;
+
+  text-align: left;
+}
+
+
+/* Hide abbreviation when expanded */
+.category-side-tabs.expanded
+.category-tab-short {
+  display: none;
+}
+
+
+/* Show full name when expanded */
+.category-side-tabs.expanded
+.category-tab-full {
+  display: block;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* Hover */
+.category-side-tab:hover {
+  background: #dbeafe;
+}
+
+
+/* Selected tab */
+.category-side-tab.active {
+  background: #1f2937;
+  color: white;
+  border-color: #1f2937;
+}
+
+
+/* Scroll destination spacing */
+.category-section {
+  scroll-margin-top: 20px;
+}
+
+
+/* ==========================
+   SMALL SCREEN
+========================== */
+
+@media (max-width: 760px) {
+
+  .column-category-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .category-side-tabs {
+    position: sticky;
+    top: 0;
+
+    flex-direction: row;
+
+    overflow-x: auto;
+
+    padding: 6px 0;
+
+    background: white;
+  }
+
+  .category-side-tab {
+    width: auto;
+    min-width: max-content;
+    min-height: auto;
+
+    writing-mode: horizontal-tb;
+    transform: none;
+
+    border-radius: 999px;
+
+    padding: 7px 11px;
+  }
+}

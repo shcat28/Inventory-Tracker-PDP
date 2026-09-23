@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDP Cleanroom Inventory</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-container">
+    <header class="app-header">
+      <h1>PDP Cleanroom Inventory</h1>
+    </header>
+
+    <section class="item-form-section" aria-labelledby="add-item-heading">
+      <h2 id="add-item-heading">Add New FOUP</h2>
+      <form id="item-form" class="item-form">
+        <label for="item-name">FOUP name</label>
+        <input id="item-name" name="item-name" type="text" placeholder="Enter FOUP name" required />
+
+        <label for="item-owner">Owner</label>
+        <input
+          id="item-owner"
+          name="item-owner"
+          type="text"
+          placeholder="Enter owner name"
+        />
+
+        <label for="item-color">Tape color</label>
+        <select id="item-color" name="item-color" required>
+          <option value="yellow">Yellow</option>
+          <option value="green">Green</option>
+          <option value="blue">Blue</option>
+          <option value="red">Red</option>
+          <option value="none">N/A</option>
+          <option value="custom">Custom</option>
+        </select>
+
+        <button type="submit">Add FOUP</button>
+      </form>
+    </section>
+
+    <section class="inventory-board" aria-label="Inventory columns">
+      <div class="column" data-status="active">
+        <div class="column-header">
+          <h2>Active</h2>
+          <span id="active-count" class="count">0</span>
+        </div>
+        <div id="active-list" class="item-list"></div>
+      </div>
+
+      <div class="column" data-status="inactive">
+        <div class="column-header">
+          <h2>Inactive</h2>
+          <span id="inactive-count" class="count">0</span>
+        </div>
+        <div id="inactive-list" class="item-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+const STORAGE_KEY = "cleanroomInventoryItems";
+
+const itemForm = document.getElementById("item-form");
+const itemNameInput = document.getElementById("item-name");
+const itemColorSelect = document.getElementById("item-color");
+const activeList = document.getElementById("active-list");
+const inactiveList = document.getElementById("inactive-list");
+const activeCount = document.getElementById("active-count");
+const inactiveCount = document.getElementById("inactive-count");
+const itemOwnerInput = document.getElementById("item-owner");
+
+let items = loadItems();
+renderItems();
+
+itemForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const name = itemNameInput.value.trim();
+  const owner = itemOwnerInput.value.trim();
+  const color = itemColorSelect.value;
+  if (!name) return;
+
+  const newItem = {
+    id: crypto.randomUUID(),
+    name,
+    owner,
+    color,
+    customColor: color === "custom" ? "Custom" : "",
+    saveStatus: "No-RS",
+    notes: "",
+    status: "active",
+    createdDate: new Date().toISOString(),
+    inactiveDate: null,
+  };
+
+  items.push(newItem);
+  saveItems();
+  renderItems();
+
+  itemForm.reset();
+  itemNameInput.focus();
+});
+
+function loadItems() {
+  const savedItems = localStorage.getItem(STORAGE_KEY);
+  return savedItems ? JSON.parse(savedItems) : [];
+}
+
+function saveItems() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+}
+
+function renderItems() {
+  activeList.innerHTML = "";
+  inactiveList.innerHTML = "";
+
+  const activeItems = items.filter((item) => item.status === "active");
+  const inactiveItems = items.filter((item) => item.status === "inactive");
+
+  activeCount.textContent = activeItems.length;
+  inactiveCount.textContent = inactiveItems.length;
+
+  renderColumn(activeItems, activeList, "No active items yet.");
+  renderColumn(inactiveItems, inactiveList, "No inactive items yet.");
+}
+
+function renderColumn(columnItems, listElement, emptyMessage) {
+  if (columnItems.length === 0) {
+    const message = document.createElement("p");
+    message.className = "empty-message";
+    message.textContent = emptyMessage;
+    listElement.appendChild(message);
+    return;
+  }
+
+  const groupedItems = groupItemsByCreatedMonth(columnItems);
+
+  Object.keys(groupedItems).forEach((monthLabel) => {
+    const details = document.createElement("details");
+    details.className = "month-section";
+    details.open = true;
+
+    const summary = document.createElement("summary");
+    summary.className = "month-summary";
+    summary.textContent = `${monthLabel} (${groupedItems[monthLabel].length})`;
+
+    const monthItemsContainer = document.createElement("div");
+    monthItemsContainer.className = "month-items";
+
+    groupedItems[monthLabel].forEach((item) => {
+      const card = createItemCard(item);
+      monthItemsContainer.appendChild(card);
+    });
+
+    details.appendChild(summary);
+    details.appendChild(monthItemsContainer);
+    listElement.appendChild(details);
+  });
+}
+
+function createItemCard(item) {
+  const card = document.createElement("article");
+  card.className = `item-card ${item.color}`;
+
+  const inactiveDateText = item.inactiveDate
+    ? `<div><strong>Inactive Date:</strong> ${formatDate(item.inactiveDate)}</div>`
+    : "";
+
+  card.innerHTML = `
+    <div class="item-card-header">
+      <h3 class="item-name">${escapeHtml(item.name)}</h3>
+      <div class="pill-group">
+        <span class="color-pill">
+          ${
+            item.color === "custom"
+              ? escapeHtml(item.customColor || "Custom")
+              : formatLabel(item.color)
+          }
+        </span>
+        <span class="save-pill ${item.saveStatus === "Yes-RS" ? "save" : "not-save"}">
+          ${formatLabel(item.saveStatus || "No-RS")}
+        </span>
+      </div>
+    </div>
+
+    <div class="item-details">
+      <div><strong>Created:</strong> ${formatDate(item.createdDate)}</div>
+
+      <label class="inline-edit-label">
+        <strong>Owner:</strong>
+        <input
+          class="owner-input"
+          data-action="change-owner"
+          data-id="${item.id}"
+          value="${escapeHtml(item.owner || "")}"
+          placeholder="Owner"
+        />
+      </label>
+
+      ${
+        item.color === "custom"
+          ? `
+        <label class="inline-edit-label" for="custom-color-${item.id}">
+          <strong>Custom Tape Color:</strong>
+          <input
+            id="custom-color-${item.id}"
+            class="custom-color-input"
+            data-action="change-custom-color"
+            data-id="${item.id}"
+            value="${escapeHtml(item.customColor || "")}"
+            placeholder="Enter custom tape color"
+          />
+        </label>
+      `
+          : ""
+      }
+
+      <label class="notes-label" for="notes-${item.id}">
+        <strong>Notes:</strong>
+        <textarea
+          id="notes-${item.id}"
+          class="notes-textarea"
+          data-action="change-notes"
+          data-id="${item.id}"
+          placeholder="Add notes about this item..."
+        >${escapeHtml(item.notes || "")}</textarea>
+      </label>
+
+      <label class="inline-edit-label" for="save-status-${item.id}">
+        <strong>RS:</strong>
+        <select
+          id="save-status-${item.id}"
+          class="save-status-select"
+          data-action="change-save-status"
+          data-id="${item.id}"
+        >
+          <option value="No-RS" ${getSelected(item.saveStatus, "No-RS")}>No</option>
+          <option value="Yes-RS" ${getSelected(item.saveStatus, "Yes-RS")}>Yes</option>
+        </select>
+      </label>
+
+      ${inactiveDateText}
+    </div>
+
+    <div class="item-actions">
+      <button class="edit-btn" type="button" data-action="edit" data-id="${item.id}">Edit</button>
+      <button class="move-btn" type="button" data-action="move" data-id="${item.id}">
+        Move to ${item.status === "active" ? "Inactive" : "Active"}
+      </button>
+      <button class="delete-btn" type="button" data-action="delete" data-id="${item.id}">Delete</button>
+    </div>
+  `;
+
+  return card;
+}
+
+function groupItemsByCreatedMonth(columnItems) {
+  const sortedItems = [...columnItems].sort(
+    (a, b) => new Date(b.createdDate) - new Date(a.createdDate)
+  );
+
+  return sortedItems.reduce((groups, item) => {
+    const monthLabel = formatCreatedMonth(item.createdDate);
+
+    if (!groups[monthLabel]) {
+      groups[monthLabel] = [];
+    }
+
+    groups[monthLabel].push(item);
+    return groups;
+  }, {});
+}
+
+function formatCreatedMonth(dateString) {
+  return new Date(dateString).toLocaleString(undefined, {
+    year: "numeric",
+    month: "long",
+  });
+}
+
+document.addEventListener("click", (event) => {
+  const button = event.target.closest("button[data-action]");
+  if (!button) return;
+
+  const action = button.dataset.action;
+  const id = button.dataset.id;
+
+  if (action === "edit") {
+    editItem(id);
+  } else if (action === "move") {
+    moveItem(id);
+  } else if (action === "delete") {
+    deleteItem(id);
+  }
+});
+
+document.addEventListener("change", (event) => {
+  const select = event.target.closest("select[data-action='change-save-status']");
+  if (!select) return;
+
+  changeSaveStatus(select.dataset.id, select.value);
+});
+
+document.addEventListener("input", (event) => {
+  const customColorInput = event.target.closest("input[data-action='change-custom-color']");
+  if (customColorInput) {
+    changeCustomColor(customColorInput.dataset.id, customColorInput.value);
+    return;
+  }
+
+  const ownerInput = event.target.closest("input[data-action='change-owner']");
+  if (ownerInput) {
+    changeOwner(ownerInput.dataset.id, ownerInput.value);
+    return;
+  }
+
+  const notesBox = event.target.closest("textarea[data-action='change-notes']");
+  if (notesBox) {
+    changeNotes(notesBox.dataset.id, notesBox.value);
+  }
+});
+
+function editItem(id) {
+  const item = items.find((item) => item.id === id);
+  if (!item) return;
+
+  const updatedName = prompt("Edit FOUP name:", item.name);
+  if (updatedName === null) return;
+
+  const trimmedName = updatedName.trim();
+  if (!trimmedName) return;
+
+  item.name = trimmedName;
+  saveItems();
+  renderItems();
+}
+
+function changeSaveStatus(id, newSaveStatus) {
+  const item = items.find((item) => item.id === id);
+  if (!item) return;
+
+  item.saveStatus = newSaveStatus;
+  saveItems();
+  renderItems();
+}
+
+function moveItem(id) {
+  const item = items.find((item) => item.id === id);
+  if (!item) return;
+
+  if (item.status === "active") {
+    item.status = "inactive";
+    item.inactiveDate = new Date().toISOString();
+  } else {
+    item.status = "active";
+    item.inactiveDate = null;
+  }
+
+  saveItems();
+  renderItems();
+}
+
+function deleteItem(id) {
+  const item = items.find((item) => item.id === id);
+  if (!item) return;
+
+  const confirmed = confirm(`Delete "${item.name}"?`);
+  if (!confirmed) return;
+
+  items = items.filter((item) => item.id !== id);
+  saveItems();
+  renderItems();
+}
+
+function getSelected(currentValue, optionValue) {
+  const normalizedValue = currentValue || "No-RS";
+  return normalizedValue === optionValue ? "selected" : "";
+}
+
+function formatLabel(value) {
+  if (value === "No-RS") return "No";
+  if (value === "Yes-RS") return "Yes";
+  if (value === "none") return "N/A";
+  if (value === "not-save") return "Not Save";
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function formatDate(dateString) {
+  return new Date(dateString).toLocaleString(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function changeCustomColor(id, newCustomColor) {
+  const item = items.find((item) => item.id === id);
+  if (!item) return;
+
+  item.customColor = newCustomColor;
+  saveItems();
+}
+
+function changeOwner(id, newOwner) {
+  const item = items.find((item) => item.id === id);
+  if (!item) return;
+
+  item.owner = newOwner;
+  saveItems();
+}
+
+function changeNotes(id, newNotes) {
+  const item = items.find((item) => item.id === id);
+  if (!item) return;
+
+  item.notes = newNotes;
+  saveItems();
+}
